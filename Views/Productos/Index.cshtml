@@ -1,0 +1,32 @@
+@model List<Producto>
+
+<h1>Productos</h1>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Nuevo Producto</a>
+
+@if (Model.Any()) {
+<table class="table table-stripeda">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Precio</th>
+            <th>Stock</th>
+            <th>Categoria</th>
+            <th>Descripcion</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model){
+            <tr>
+                <td>@p.Nombre</td>
+                <td>@p.Precio.ToString("C")</td>
+                <td>@p.Stock</td>
+                <td>@p.Categoria</td>
+                <td>@p.Descripcion</td>
+                <td></td>
+            </tr>
+        }
+    </tbody>
+</table>
+} else { <p>No hay productos todavía.</p> }
