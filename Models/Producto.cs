@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace tCRUD.Models
 {
@@ -16,8 +17,11 @@ namespace tCRUD.Models
         [Range(0, int.MaxValue)]
         public int Stock { get; set; }
 
-        [StringLength(50)]
-        public string? Categoria { get; set; }
+         // ---- La relación, ahora explícita ----
+        public int CategoriaId { get; set; }
+
+        [ForeignKey(nameof(CategoriaId))]           // "mi FK es la propiedad CategoriaId"
+        public Categoria? Categoria { get; set; }
 
         [StringLength(50)]
         public string? Descripcion { get; set; }

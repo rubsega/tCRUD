@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using tCRUD.Data;
 using tCRUD.Models;
 
@@ -16,12 +17,15 @@ public class ProductosController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var productos = await _context.Productos.ToListAsync();
+        var productos = await _context.Productos
+                                  .Include(p => p.Categoria)
+                                  .ToListAsync();
         return View(productos);
     }
 
     public IActionResult Create()          // GET: muestra el formulario
     {
+        ViewBag.Categorias = new SelectList(_context.Categorias, "Id", "Nombre"); //Sirve para obtener datos de la tabla Categorias y mostrarlos en el formulario
         return View();
     }
     
@@ -35,6 +39,7 @@ public class ProductosController : Controller
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        ViewBag.Categorias = new SelectList(_context.Categorias, "Id", "Nombre"); //Sirve para obtener datos de la tabla Categorias y mostrarlos en el formulario
         return View(producto);
     }
     public async Task<IActionResult> Edit(int id)

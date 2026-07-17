@@ -1,17 +1,14 @@
-@model List<Producto>
+@model List<Categoria>
 
-<h1>Productos</h1>
+<h1>Categorias</h1>
 
-<a asp-action="Create" class="btn btn-primary mb-3">Nuevo Producto</a>
+<a asp-action="Create" class="btn btn-primary mb-3">Nueva Categoria</a>
 
 @if (Model.Any()) {
 <table class="table table-stripeda">
     <thead>
         <tr>
             <th>Nombre</th>
-            <th>Precio</th>
-            <th>Stock</th>
-            <th>Categoria</th>
             <th>Descripcion</th>
             <th style="width: 1%"></th>
 
@@ -21,9 +18,6 @@
         @foreach (var p in Model){
             <tr>
                 <td>@p.Nombre</td>
-                <td>@p.Precio.ToString("C")</td>
-                <td>@p.Stock</td>
-                <td>@p.Categoria?.Nombre</td>
                 <td>@p.Descripcion</td>
                 <td>
                     <div class="d-flex gap-1">
@@ -48,7 +42,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
-                ¿Seguro que quieres eliminar <strong id="modalNombreProducto"></strong>?
+                ¿Seguro que quieres eliminar <strong id="modalNombreCategoria"></strong>?
                 Esta acción no se puede deshacer.
             </div>
             <div class="modal-footer">
@@ -62,7 +56,7 @@
     </div>
 </div>
 
-} else { <p>No hay productos todavía.</p> }
+} else { <p>No hay Categorias todavía.</p> }
 
 @section Scripts {
     <script>
@@ -76,8 +70,8 @@
             const nombre = boton.getAttribute('data-nombre');
 
             // rellenar los huecos
-            document.getElementById('modalNombreProducto').textContent = nombre;
-            document.getElementById('formEliminar').action = '/Productos/Delete/' + id;
+            document.getElementById('modalNombreCategoria').textContent = nombre;
+            document.getElementById('formEliminar').action = '/Categorias/Delete/' + id;
         });
     </script>
 }

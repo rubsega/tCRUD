@@ -1,0 +1,23 @@
+@model Categoria
+
+<h1>Editar Producto</h1>
+
+<form asp-action="Edit" method="post">
+    <div class="mb-3">
+        <label asp-for="Nombre" class="form-label"></label>
+        <input asp-for="Nombre" class="form-control" /> 
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+    <div class="mb-3">
+    <label asp-for="Descripcion" class="form-label"></label>
+    <input asp-for="Descripcion" class="form-control" />
+    <span asp-validation-for="Descripcion" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Editar Categoria</button>
+    <button asp-action="Index" class="btn btn-secondary">Cancelar</button>
+</form>
+<div asp-validation-summary="All" class="text-danger"></div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
