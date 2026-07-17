@@ -44,6 +44,7 @@ public class ProductosController : Controller
     }
     public async Task<IActionResult> Edit(int id)
     {
+         ViewBag.Categorias = new SelectList(_context.Categorias, "Id", "Nombre");
         var producto = await _context.Productos.FindAsync(id);
         if (producto == null)
         {

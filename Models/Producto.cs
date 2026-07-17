@@ -18,9 +18,8 @@ namespace tCRUD.Models
         public int Stock { get; set; }
 
          // ---- La relación, ahora explícita ----
-        public int CategoriaId { get; set; }
-
-        [ForeignKey(nameof(CategoriaId))]           // "mi FK es la propiedad CategoriaId"
+        public int? CategoriaId { get; set; }
+       // "mi FK es la propiedad CategoriaId"
         public Categoria? Categoria { get; set; }
 
         [StringLength(50)]
