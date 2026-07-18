@@ -1,0 +1,152 @@
+@model Venta
+
+<h1>Nueva venta</h1>
+
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="All" class="text-danger"></div>
+
+    <!-- Selector (no viaja en el POST: sin name) -->
+    <div class="row g-2 mb-3">
+        <div class="col-auto">
+            <select id="selProducto" class="form-select">
+                <option value="">-- Seleccionar producto --</option>
+                @foreach (var p in (List<Producto>)ViewBag.Productos)
+                {
+                    <option value="@p.Id" data-precio="@p.Precio.ToString(System.Globalization.CultureInfo.InvariantCulture)">@p.Nombre</option>
+                }
+            </select>
+        </div>
+        <div class="col-auto">
+            <button type="button" id="btnAgregar" class="btn btn-outline-primary" disabled>
+                + Agregar al carrito
+            </button>
+        </div>
+    </div>
+
+    <!-- El carrito -->
+    <table class="table align-middle" id="tablaCarrito">
+        <thead>
+            <tr>
+                <th style="width: 70px">#</th>
+                <th>Producto</th>
+                <th style="width: 130px">Cantidad</th>
+                <th style="width: 140px" class="text-end">Subtotal</th>
+                <th style="width: 1%"></th>
+            </tr>
+        </thead>
+        <tbody id="carrito"></tbody>
+        <tfoot>
+            <tr>
+                <th colspan="3" class="text-end">Total:</th>
+                <th id="totalCarrito" class="text-end">$0.00</th>
+                <th></th>
+            </tr>
+        </tfoot>
+    </table>
+
+    <p id="carritoVacio" class="text-muted">El carrito está vacío.</p>
+
+    <div>
+        <button type="submit" id="btnRegistrar" class="btn btn-success" disabled>Registrar venta</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </div>
+</form>
+
+@section Scripts {
+    <script>
+        const sel = document.getElementById('selProducto');
+        const btnAgregar = document.getElementById('btnAgregar');
+        const btnRegistrar = document.getElementById('btnRegistrar');
+        const carrito = document.getElementById('carrito');
+        const msgVacio = document.getElementById('carritoVacio');
+        const totalCarrito = document.getElementById('totalCarrito');
+
+        const moneda = v => v.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
+        sel.addEventListener('change', () => btnAgregar.disabled = (sel.value === ''));
+
+        btnAgregar.addEventListener('click', function () {
+            if (sel.value === '') return;
+
+            const opcion = sel.options[sel.selectedIndex];
+            const id = opcion.value;
+            const nombre = opcion.text;
+            const precio = parseFloat(opcion.dataset.precio);
+
+            const i = carrito.children.length;
+            const tr = document.createElement('tr');
+            tr.dataset.productoId = id;
+            tr.dataset.precio = precio;
+            tr.innerHTML = `
+                <td>${id}</td>
+                <td>
+                    <span class="nombreProducto">${nombre}</span>
+                    <input type="hidden" name="Items[${i}].ProductoId" value="${id}" />
+                </td>
+                <td>
+                    <input type="number" name="Items[${i}].Cantidad" class="form-control cantidad"
+                           value="1" min="1" required />
+                </td>
+                <td class="text-end subtotal">${moneda(precio)}</td>
+                <td class="text-nowrap">
+                    <button type="button" class="btn btn-sm btn-outline-danger btnQuitar">✕</button>
+                </td>`;
+            carrito.appendChild(tr);
+
+            opcion.remove();
+            sel.value = '';
+            btnAgregar.disabled = true;
+            actualizarEstado();
+        });
+
+        // Recalcular el subtotal del renglón cuando cambia su cantidad
+        carrito.addEventListener('input', function (e) {
+            if (!e.target.classList.contains('cantidad')) return;
+            const tr = e.target.closest('tr');
+            const precio = parseFloat(tr.dataset.precio);
+            const cantidad = parseInt(e.target.value) || 0;
+            tr.querySelector('.subtotal').textContent = moneda(precio * cantidad);
+            actualizarTotal();
+        });
+
+        // Quitar del carrito → devolver la opción al select
+        carrito.addEventListener('click', function (e) {
+            if (!e.target.classList.contains('btnQuitar')) return;
+
+            const tr = e.target.closest('tr');
+            const opt = document.createElement('option');
+            opt.value = tr.dataset.productoId;
+            opt.text = tr.querySelector('.nombreProducto').textContent;
+            opt.dataset.precio = tr.dataset.precio;
+            sel.appendChild(opt);
+
+            tr.remove();
+            reindexar();
+            actualizarEstado();
+        });
+
+        function reindexar() {
+            [...carrito.children].forEach((tr, i) => {
+                tr.querySelector('input[type="hidden"]').name = `Items[${i}].ProductoId`;
+                tr.querySelector('input[type="number"]').name = `Items[${i}].Cantidad`;
+            });
+        }
+
+        function actualizarTotal() {
+            let total = 0;
+            [...carrito.children].forEach(tr => {
+                const cantidad = parseInt(tr.querySelector('.cantidad').value) || 0;
+                total += parseFloat(tr.dataset.precio) * cantidad;
+            });
+            totalCarrito.textContent = moneda(total);
+        }
+
+        function actualizarEstado() {
+            const hayLineas = carrito.children.length > 0;
+            btnRegistrar.disabled = !hayLineas;
+            msgVacio.style.display = hayLineas ? 'none' : '';
+            btnAgregar.disabled = (sel.value === '');
+            actualizarTotal();
+        }
+    </script>
+}

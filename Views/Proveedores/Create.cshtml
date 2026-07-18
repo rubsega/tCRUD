@@ -1,0 +1,32 @@
+@model Proveedor
+
+<h1>Nuevo Proveedor</h1>
+
+<form asp-action="Create" method="post">
+    <div class="mb-3">
+        <label asp-for="Nombre" class="form-label"></label>
+        <input asp-for="Nombre" class="form-control" /> 
+        <span asp-validation-for="Nombre" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+    <label asp-for="Direccion" class="form-label"></label>
+    <input asp-for="Direccion" class="form-control" />
+    <span asp-validation-for="Direccion" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+    <label asp-for="Telefono" class="form-label"></label>
+    <input asp-for="Telefono" class="form-control" />
+    <span asp-validation-for="Telefono" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+    <label asp-for="Email" class="form-label"></label>
+    <input asp-for="Email" class="form-control" />
+    <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Crear Proveedor</button>
+    <button asp-action="Index" class="btn btn-secondary">Cancelar</button>
+</form>
+<div asp-validation-summary="All" class="text-danger"></div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

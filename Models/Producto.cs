@@ -17,6 +17,9 @@ namespace tCRUD.Models
         [Range(0, int.MaxValue)]
         public int Stock { get; set; }
 
+        [NotMapped]
+        public bool StockBajo => Stock < 5; 
+
          // ---- La relación, ahora explícita ----
         public int? CategoriaId { get; set; }
        // "mi FK es la propiedad CategoriaId"
@@ -24,5 +27,7 @@ namespace tCRUD.Models
 
         [StringLength(50)]
         public string? Descripcion { get; set; }
+
+        
     }
 }
