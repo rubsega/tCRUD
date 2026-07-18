@@ -24,7 +24,7 @@ public class ComprasController : Controller
         return View(compras);
     }
 
-    // GET: /Compras/Details/5
+    // GET: /Compras/Items/5
     public async Task<IActionResult> Items(int id)
     {
         var compra = await _context.Compras
