@@ -27,10 +27,10 @@
                 <td>@p.Descripcion</td>
                 <td>
                     <div class="d-flex gap-1">
-                        <a asp-action="Edit" asp-route-id="@p.Id" class="btn btn-sm btn-warning">Editar</a>
+                        <a asp-action="Edit" asp-route-id="@p.Uuid" class="btn btn-sm btn-warning">Editar</a>
                         <button type="button" class="btn btn-sm btn-danger"
                                 data-bs-toggle="modal" data-bs-target="#modalEliminar"
-                                data-id="@p.Id" data-nombre="@p.Nombre">
+                                data-id="@p.Uuid" data-nombre="@p.Nombre">
                             Eliminar
                         </button>
                     </div>

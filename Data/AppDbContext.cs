@@ -27,6 +27,18 @@ namespace tCRUD.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<Venta>()
+                .HasIndex(v => v.Folio)
+                .IsUnique();
+
+            modelBuilder.Entity<Compra>()
+                .HasIndex(c => c.Folio)
+                .IsUnique();
+
+            modelBuilder.Entity<Producto>()
+                .HasIndex(p => p.Uuid)
+                .IsUnique();
+
             // ===== Producto — Categoria =====
             // Categoría opcional: borrar una categoría deja a sus productos
             // vivos y sin categoría, listos para reasignarse.

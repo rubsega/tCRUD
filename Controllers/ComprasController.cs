@@ -24,13 +24,13 @@ public class ComprasController : Controller
         return View(compras);
     }
 
-    // GET: /Compras/Items/5
-    public async Task<IActionResult> Items(int id)
+    // GET: /Compras/Details/5
+    public async Task<IActionResult> Items(Guid id)
     {
         var compra = await _context.Compras
-                                   .Include(c => c.Items)
-                                   .ThenInclude(i => i.Producto)
-                                   .FirstOrDefaultAsync(c => c.Id == id);
+                                .Include(c => c.Items)
+                                .ThenInclude(i => i.Producto)
+                                .FirstOrDefaultAsync(c => c.Folio == id);
 
         if (compra == null) return NotFound();
         return View(compra);

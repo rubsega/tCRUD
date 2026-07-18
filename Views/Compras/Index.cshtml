@@ -25,7 +25,7 @@
                     <td>@c.Items.Sum(i => i.Cantidad)</td>
                     <td class="text-end">@c.Total.ToString("C")</td>
                     <td>
-                        <a asp-action="Items" asp-route-id="@c.Id" class="btn btn-sm btn-info">Ver</a>
+                        <a asp-action="Items" asp-route-id="@c.Folio.ToString()" class="btn btn-sm btn-info">Ver</a>
                     </td>
                 </tr>
             }

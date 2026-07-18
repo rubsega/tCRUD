@@ -6,6 +6,7 @@ namespace tCRUD.Models
     public class Venta
     {
         public int Id { get; set; }
+        public Guid Folio { get; set; } = Guid.CreateVersion7();
         public DateTime Fecha { get; set; } = DateTime.Now;
         public List<VentaItem> Items { get; set; } = new();
         [NotMapped]

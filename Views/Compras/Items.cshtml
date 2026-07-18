@@ -1,6 +1,6 @@
 @model Compra
 
-<h1>Compra #@Model.Id</h1>
+<h1>Compra #@Model.Folio.ToString()</h1>
 <p class="text-muted">@Model.Fecha.ToLocalTime().ToString("g")</p>
 
 <table class="table table-striped">

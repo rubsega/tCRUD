@@ -6,6 +6,7 @@ namespace tCRUD.Models
     public class Producto
     {
         public int Id { get; set; }
+        public Guid Uuid { get; set; } = Guid.CreateVersion7();
 
         [Required(ErrorMessage = "El nombre es obligatorio")]
         [StringLength(100)]

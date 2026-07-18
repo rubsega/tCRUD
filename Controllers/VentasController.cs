@@ -88,12 +88,12 @@ public async Task<IActionResult> Create(Venta venta)
     return View(venta);
     }
 
-    public async Task<IActionResult> Items(int id)
+    public async Task<IActionResult> Items(Guid id)
     {
         var venta = await _context.Ventas
                                 .Include(v => v.Items)
                                 .ThenInclude(i => i.Producto)
-                                .FirstOrDefaultAsync(v => v.Id == id);
+                                .FirstOrDefaultAsync(v => v.Folio == id);
 
         if (venta == null) return NotFound();
         return View(venta);
