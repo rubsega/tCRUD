@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using tCRUD.Data;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 

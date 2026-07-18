@@ -1,0 +1,38 @@
+@model List<Compra>
+
+<h1>Compras</h1>
+
+<a asp-action="Create" class="btn btn-primary mb-3">Nueva compra</a>
+
+@if (Model.Any())
+{
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Fecha</th>
+                <th>Artículos</th>
+                <th class="text-end">Total</th>
+                <th style="width: 1%"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model)
+            {
+                <tr>
+                    <td>@c.Id</td>
+                    <td>@c.Fecha.ToLocalTime().ToString("g")</td>
+                    <td>@c.Items.Sum(i => i.Cantidad)</td>
+                    <td class="text-end">@c.Total.ToString("C")</td>
+                    <td>
+                        <a asp-action="Items" asp-route-id="@c.Id" class="btn btn-sm btn-info">Ver</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay compras registradas todavía.</p>
+}
