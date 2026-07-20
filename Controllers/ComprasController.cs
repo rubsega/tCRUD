@@ -106,4 +106,21 @@ public class ComprasController : Controller
                                           .ToListAsync();
         return View(compra);
     }
+
+     public async Task<IActionResult> MasComprados()
+    {
+        var reporte = await _context.CompraItems
+            .GroupBy(i => i.Producto!.Nombre)                    // agrupa por producto
+            .Select(g => new ProductoReporteViewModel
+            {
+                Producto = g.Key,                                 // el nombre por el que agrupaste
+                UnidadesTotales = g.Sum(i => i.Cantidad),         // suma dentro del grupo
+                NumeroDeCompras = g.Count()                       // cuántas líneas lo incluyeron
+            })
+            .OrderByDescending(r => r.UnidadesTotales)            // más comprados primero
+            .Take(10)                                             // top 10
+            .ToListAsync();
+
+        return View(reporte);
+    }
 }

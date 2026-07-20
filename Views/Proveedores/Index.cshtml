@@ -9,6 +9,7 @@
     <thead>
         <tr>
             <th>Nombre</th>
+            <th>Productos</th>
             <th>Direccion</th>
             <th>Telefono</th>
             <th>Email</th>
@@ -20,6 +21,16 @@
         @foreach (var p in Model){
             <tr>
                 <td>@p.Nombre</td>
+                <td>
+                    @if (p.Productos.Any())
+                    {
+                        @string.Join(", ", p.Productos.Select(p => p.Nombre))
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin productos</span>
+                    }
+                </td>
                 <td>@p.Direccion</td>
                 <td>@p.Telefono</td>
                 <td>@p.Email</td>

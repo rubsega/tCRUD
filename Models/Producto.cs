@@ -1,10 +1,12 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace tCRUD.Models
 {
     public class Producto
     {
+        [BindNever]
         public int Id { get; set; }
         public Guid Uuid { get; set; } = Guid.CreateVersion7();
 
@@ -25,6 +27,8 @@ namespace tCRUD.Models
         public int? CategoriaId { get; set; }
        // "mi FK es la propiedad CategoriaId"
         public Categoria? Categoria { get; set; }
+
+        public ICollection<Proveedor> Proveedores { get; set; } = new List<Proveedor>(); //Muchos a muchos
 
         [StringLength(50)]
         public string? Descripcion { get; set; }

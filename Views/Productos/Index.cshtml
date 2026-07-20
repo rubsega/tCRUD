@@ -11,6 +11,7 @@
             <th>Nombre</th>
             <th>Precio</th>
             <th>Stock</th>
+            <th>Proveedores</th>
             <th>Categoria</th>
             <th>Descripcion</th>
             <th style="width: 1%"></th>
@@ -23,6 +24,16 @@
                 <td>@p.Nombre</td>
                 <td>@p.Precio.ToString("C")</td>
                 <td>@p.Stock</td>
+                <td>
+                    @if (p.Proveedores.Any())
+                    {
+                        @string.Join(", ", p.Proveedores.Select(p => p.Nombre))
+                    }
+                    else
+                    {
+                        <span class="text-muted">Sin proveedores</span>
+                    }
+                </td>
                 <td>@p.Categoria?.Nombre</td>
                 <td>@p.Descripcion</td>
                 <td>
@@ -61,6 +72,7 @@
         </div>
     </div>
 </div>
+
 
 } else { <p>No hay productos todavía.</p> }
 

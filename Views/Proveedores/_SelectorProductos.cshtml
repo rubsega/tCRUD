@@ -1,0 +1,98 @@
+@{
+    var productos = (List<Producto>)ViewBag.Productos;
+    var idsSeleccionados = ViewBag.ProductosSeleccionados as List<int> ?? new List<int>();
+}
+
+<div class="mb-3">
+    <label class="form-label">Productos</label>
+
+    <!-- El box lineal estilo input: aquí viven los chips -->
+    <div id="provChips" class="form-control d-flex flex-wrap gap-1 align-items-center"
+         style="min-height: 38px; height: auto;">
+        @foreach (var prod in productos.Where(p => idsSeleccionados.Contains(p.Id)))
+        {
+            <span class="badge text-bg-primary d-flex align-items-center gap-1" data-id="@prod.Id">
+                @prod.Nombre
+                <button type="button" class="btn-close btn-close-white btnQuitarProv"
+                        style="font-size: 0.6em;" aria-label="Quitar"></button>
+                <input type="hidden" name="productoIds" value="@prod.Id" />
+            </span>
+        }
+        <span id="provPlaceholder" class="text-muted small">Sin productos</span>
+    </div>
+
+    <!-- El agregador: aparece al pedir uno -->
+    <div class="mt-2">
+        <button type="button" id="btnProvMostrar" class="btn btn-outline-primary btn-sm">+ Agregar producto</button>
+
+        <div id="provPicker" class="input-group input-group-sm mt-1 d-none" style="max-width: 320px;">
+            <select id="selProducto" class="form-select">
+                <option value="">-- Elegir producto --</option>
+                @foreach (var prod in productos.Where(p => !idsSeleccionados.Contains(p.Id)))
+                {
+                    <option value="@prod.Id">@prod.Nombre</option>
+                }
+            </select>
+            <button type="button" id="btnProvConfirmar" class="btn btn-primary">Agregar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    (function () {
+        const chips = document.getElementById('provChips');
+        const placeholder = document.getElementById('provPlaceholder');
+        const btnMostrar = document.getElementById('btnProvMostrar');
+        const picker = document.getElementById('provPicker');
+        const sel = document.getElementById('selProducto');
+
+        function actualizarPlaceholder() {
+            const hayChips = chips.querySelector('.badge') !== null;
+            placeholder.style.display = hayChips ? 'none' : '';
+        }
+
+        // "+ Agregar producto" → mostrar/ocultar el picker
+        btnMostrar.addEventListener('click', function () {
+            picker.classList.toggle('d-none');
+            if (!picker.classList.contains('d-none')) sel.focus();
+        });
+
+        // Confirmar → el elegido se vuelve chip y sale del select
+        document.getElementById('btnProvConfirmar').addEventListener('click', function () {
+            if (sel.value === '') return;
+
+            const opcion = sel.options[sel.selectedIndex];
+
+            const chip = document.createElement('span');
+            chip.className = 'badge text-bg-primary d-flex align-items-center gap-1';
+            chip.dataset.id = opcion.value;
+            chip.innerHTML = `
+                ${opcion.text}
+                <button type="button" class="btn-close btn-close-white btnQuitarProv"
+                        style="font-size: 0.6em;" aria-label="Quitar"></button>
+                <input type="hidden" name="proveedorIds" value="${opcion.value}" />`;
+            chips.appendChild(chip);
+
+            opcion.remove();
+            sel.value = '';
+            picker.classList.add('d-none');
+            actualizarPlaceholder();
+        });
+
+        // ✕ del chip → regresa al select
+        chips.addEventListener('click', function (e) {
+            if (!e.target.classList.contains('btnQuitarProv')) return;
+
+            const chip = e.target.closest('.badge');
+            const opt = document.createElement('option');
+            opt.value = chip.dataset.id;
+            opt.text = chip.textContent.trim();
+            sel.appendChild(opt);
+
+            chip.remove();
+            actualizarPlaceholder();
+        });
+
+        actualizarPlaceholder();
+    })();
+</script>

@@ -9,6 +9,9 @@
         <span asp-validation-for="Nombre" class="text-danger"></span>
     </div>
     <div class="mb-3">
+        <partial name="_SelectorProductos" />
+    </div>
+    <div class="mb-3">
     <label asp-for="Direccion" class="form-label"></label>
     <input asp-for="Direccion" class="form-control" />
     <span asp-validation-for="Direccion" class="text-danger"></span>
